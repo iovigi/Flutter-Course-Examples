@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'question.dart';
-import 'answer.dart';
+import 'quiz.dart';
+import 'result.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,15 +12,24 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   int _i = 0;
+  int _totalScore = 0;
 
   var _questions = [
     {
       'questionText': 'What\'s your favorite color?',
-      'answers': ['Red', 'Blue', 'Puple']
+      'answers': [
+        {'text': 'Red', 'score': 5},
+        {'text': 'Blue', 'score': 3},
+        {'text': 'Pink', 'score': 2}
+      ]
     },
     {
       'questionText': 'What\'s your favorite animal?',
-      'answers': ['Cat', 'Dog', 'Cow']
+      'answers': [
+        {'text': 'Cat', 'score': 1},
+        {'text': 'Dog', 'score': 2},
+        {'text': 'Cow', 'score': 3}
+      ]
     }
   ];
 
@@ -29,28 +38,35 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('My First App'),
+          title: Text(_i == _questions.length ? 'Result:' + _totalScore.toString() : 'Quiz'),
+          centerTitle: true,
         ),
-        body: Column(
-          children: [
-            Question(questionText: _questions[_i]['questionText']),
-            ...(_questions[_i]['answers'] as List<String>)
-                .map((question) => Answer(
-                      onPressed: _press,
-                      answerText: question,
-                    ))
-          ],
-        ),
+        body: _i == _questions.length
+            ? Result(
+                onPressed: _resetQuiz,
+                score: _totalScore,
+              )
+            : Quiz(question: _questions[_i], onPressed: _press),
       ),
     );
   }
 
-  void _press() {
+  void _resetQuiz() {
+    setState(() {
+      _i = 0;
+      _totalScore = 0;
+    });
+  }
+
+  void _press(int score) {
+    if (_i == _questions.length) {
+      return;
+    }
+
+    _totalScore += score;
+
     setState(() {
       _i++;
-      if (_questions.length == _i) {
-        _i = 0;
-      }
     });
   }
 }
