@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
               headline6: TextStyle(
                   fontFamily: 'OpenSans',
                   fontSize: 18,
-                  fontWeight: FontWeight.bold)),
+                  fontWeight: FontWeight.bold),
+              button: TextStyle(color: Colors.white)),
           appBarTheme: AppBarTheme(
               textTheme: ThemeData.light().textTheme.copyWith(
                   headline6: TextStyle(
@@ -41,8 +42,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-  ];
+  final List<Transaction> _userTransactions = [];
 
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
@@ -59,10 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  List<Transaction> get _recentTransations{
-    return _userTransactions.where((tx) =>  tx.date.isAfter(DateTime.now().subtract(Duration(days:7)))).toList();
+  List<Transaction> get _recentTransations {
+    return _userTransactions
+        .where(
+            (tx) => tx.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
+        .toList();
   }
-
 
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -86,9 +88,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(recentTransactions: _recentTransations,),
+            Chart(
+              recentTransactions: _recentTransations,
+            ),
             TransactionList(
               userTransactions: _userTransactions,
+              onDelete: _deleteTransaction,
             )
           ],
         ),
@@ -101,15 +106,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void _addTransaction(String title, double amount) {
+  void _addTransaction(String title, double amount, DateTime date) {
     final newTx = new Transaction(
-        id: '${_userTransactions.length + 1}',
+        id: '${_userTransactions.length + 1}' + DateTime.now().toString(),
         title: title,
         amount: amount,
-        date: DateTime.now());
+        date: date);
 
     setState(() {
       _userTransactions.add(newTx);
+    });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      this._userTransactions.removeWhere((x) => x.id == id);
     });
   }
 }
