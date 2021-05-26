@@ -20,7 +20,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
         home: MyHomePage(),
         title: 'Personal Expenses',
         theme: ThemeData(
@@ -48,10 +48,29 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   bool _showChart = false;
 
   final List<Transaction> _userTransactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
@@ -73,6 +92,47 @@ class _MyHomePageState extends State<MyHomePage> {
         .where(
             (tx) => tx.date.isAfter(DateTime.now().subtract(Duration(days: 7))))
         .toList();
+  }
+
+  List<Widget> _buildLandscapeContent({AppBar appBar, Widget txListWidget}) {
+    return [
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Text('Show Chart', style: Theme.of(context).textTheme.headline6),
+        Switch.adaptive(
+          activeColor: Theme.of(context).accentColor,
+          value: _showChart,
+          onChanged: (val) => setState(() {
+            _showChart = val;
+          }),
+        )
+      ]),
+      _showChart
+          ? Container(
+              height: (MediaQuery.of(context).size.height -
+                      appBar.preferredSize.height -
+                      MediaQuery.of(context).padding.top) *
+                  0.7,
+              child: Chart(
+                recentTransactions: _recentTransations,
+              ),
+            )
+          : txListWidget
+    ];
+  }
+
+  List<Widget> _buildPortraitContent({AppBar appBar, Widget txListWidget}) {
+    return [
+      Container(
+        height: (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.3,
+        child: Chart(
+          recentTransactions: _recentTransations,
+        ),
+      ),
+      txListWidget
+    ];
   }
 
   Widget build(BuildContext context) {
@@ -123,44 +183,9 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          if (isLandscape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              Text('Show Chart', style: Theme.of(context).textTheme.headline6),
-              Switch.adaptive(
-                activeColor: Theme.of(context).accentColor,
-                value: _showChart,
-                onChanged: (val) => setState(() {
-                  _showChart = val;
-                }),
-              )
-            ]),
-          if (!isLandscape)
-            Container(
-              height: (MediaQuery.of(context).size.height -
-                      appBar.preferredSize.height -
-                      MediaQuery.of(context).padding.top) *
-                  0.3,
-              child: Chart(
-                recentTransactions: _recentTransations,
-              ),
-            ),
-          if (!isLandscape) txListWidget,
-          if (isLandscape)
-            _showChart
-                ? Container(
-                    height: (MediaQuery.of(context).size.height -
-                            appBar.preferredSize.height -
-                            MediaQuery.of(context).padding.top) *
-                        0.7,
-                    child: Chart(
-                      recentTransactions: _recentTransations,
-                    ),
-                  )
-                : txListWidget
-        ],
+        children: isLandscape
+            ? _buildLandscapeContent(appBar: appBar, txListWidget: txListWidget)
+            : _buildPortraitContent(appBar: appBar, txListWidget: txListWidget),
       ),
     ));
 

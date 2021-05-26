@@ -50,6 +50,21 @@ class _NewTransactionState extends State<NewTransaction> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(NewTransaction oldWidget) {
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Card(
@@ -77,7 +92,10 @@ class _NewTransactionState extends State<NewTransaction> {
                           ? 'No Date Chosen'
                           : 'Picked Date ${DateFormat.yMd().format(_selectedDate)}'),
                     ),
-                   AdaptiveButton(showDatePicker: _showDatePicker, text: 'Choose Date',)
+                    AdaptiveButton(
+                      showDatePicker: _showDatePicker,
+                      text: 'Choose Date',
+                    )
                   ],
                 ),
               ),
