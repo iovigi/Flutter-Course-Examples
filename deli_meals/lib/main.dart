@@ -1,3 +1,4 @@
+import 'package:deli_meals/screen/filters_screen.dart';
 import 'package:deli_meals/screen/category_meals_screen.dart';
 import 'package:deli_meals/screen/meal_detail_screen.dart';
 import 'package:deli_meals/screen/tabs_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/': (ctx) => TabScreen(),
         CategoryMealsScreen.routeName: (ctx) => CategoryMealsScreen(),
         MealDetailScreen.routeName: (ctx) => MealDetailScreen(),
+        FiltersScreen.routeName: (ctx) => FiltersScreen(),
       },
       onGenerateRoute: (settings) {},
       onUnknownRoute: (settings) {},
