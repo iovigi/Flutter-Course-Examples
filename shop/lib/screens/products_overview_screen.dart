@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../widgets/app_drawer.dart';
+import 'cart_screen.dart';
+import '../providers/cart.dart';
 import '../widgets/products_grid.dart';
+import '../widgets/badge.dart';
 
 enum FliterOptions { Favorites, All }
 
@@ -34,9 +40,20 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                       PopupMenuItem(
                           child: Text('Show All'), value: FliterOptions.All)
                     ],
-                icon: Icon(Icons.more_vert))
+                icon: Icon(Icons.more_vert)),
+            Consumer<Cart>(
+              builder: (_, cartData, child) =>
+                  Badge(child: child, value: cartData.itemCount.toString()),
+              child: IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(CartScreen.routeName);
+                },
+              ),
+            )
           ],
         ),
+        drawer: AppDrawer(),
         body: ProductsGrid(showOnlyFavorites: _showOnlyFavorites));
   }
 }
