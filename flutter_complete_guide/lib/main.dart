@@ -136,8 +136,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+   SystemChrome.setSystemUIOverlayStyle(
+       SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
@@ -161,10 +161,10 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
                   icon: Icon(Icons.add),
                   onPressed: () => _startAddNewTransaction(context))
             ],
-            elevation: 0,
-            bottomOpacity: 0.0,
-            systemOverlayStyle:
-                SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+            //elevation: 0,
+            //bottomOpacity: 1.0,
+            //systemOverlayStyle:
+              //  SystemUiOverlayStyle(statusBarColor: Colors.transparent),
           );
 
     final txListWidget = Container(
