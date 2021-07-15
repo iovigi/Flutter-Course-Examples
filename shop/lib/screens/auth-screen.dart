@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -100,7 +102,7 @@ class _AuthCardState extends State<AuthCard> {
   var _isLoading = false;
   final _passwordController = TextEditingController();
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
@@ -113,6 +115,8 @@ class _AuthCardState extends State<AuthCard> {
       // Log user in
     } else {
       // Sign user up
+      await Provider.of<Auth>(context, listen: false)
+          .signup(_authData['email'], _authData['password']);
     }
     setState(() {
       _isLoading = false;
@@ -201,13 +205,17 @@ class _AuthCardState extends State<AuthCard> {
                         Text(_authMode == AuthMode.Login ? 'LOGIN' : 'SIGN UP'),
                     onPressed: _submit,
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 8.0),
-                      textStyle: TextStyle(color: Theme.of(context).primaryTextTheme.button.color),
-                      primary: Theme.of(context).primaryColor
-                    ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 30.0, vertical: 8.0),
+                        textStyle: TextStyle(
+                            color: Theme.of(context)
+                                .primaryTextTheme
+                                .button
+                                .color),
+                        primary: Theme.of(context).primaryColor),
                   ),
                 TextButton(
                   child: Text(
