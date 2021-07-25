@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -262,14 +261,13 @@ class _AuthCardState extends State<AuthCard> {
                   child: Text(
                       '${_authMode == AuthMode.Login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
                   onPressed: _switchAuthMode,
-                  style: Theme.of(context).textButtonTheme.style.copyWith(
-                        textStyle: MaterialStateProperty.all<TextStyle>(
-                            TextStyle(color: Theme.of(context).primaryColor)),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            EdgeInsets.symmetric(
-                                horizontal: 30.0, vertical: 4)),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
+                  style: ButtonStyle(
+                    textStyle: MaterialStateProperty.all<TextStyle>(
+                        TextStyle(color: Theme.of(context).primaryColor)),
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 30.0, vertical: 4)),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
                 ),
               ],
             ),

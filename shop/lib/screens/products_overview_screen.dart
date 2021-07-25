@@ -11,6 +11,8 @@ import '../widgets/badge.dart';
 enum FliterOptions { Favorites, All }
 
 class ProductsOverviewScreen extends StatefulWidget {
+  static String routeName = '/overview';
+
   @override
   _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
 }
