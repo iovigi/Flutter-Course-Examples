@@ -19,9 +19,10 @@ class OrderItem {
 }
 
 class Orders with ChangeNotifier {
-  Orders(this.token, this._orders);
+  Orders(this.token, this.userId, this._orders);
 
   final String token;
+  final String userId;
   List<OrderItem> _orders = [];
 
   List<OrderItem> get orders {
@@ -30,7 +31,7 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchAndSetOrders() async {
     final url =
-        'https://shop-c13d2-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth=$token';
+        'https://shop-c13d2-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$token';
     final response = await http.get(Uri.parse(url));
 
     final List<OrderItem> loadedOrders = [];
@@ -59,7 +60,7 @@ class Orders with ChangeNotifier {
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final url =
-        'https://shop-c13d2-default-rtdb.europe-west1.firebasedatabase.app/orders.json?auth=$token';
+        'https://shop-c13d2-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$token';
 
     try {
       final timestamp = DateTime.now();
